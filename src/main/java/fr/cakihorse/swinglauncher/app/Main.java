@@ -21,7 +21,7 @@ import java.io.IOException;
 
 public class Main extends JFrame {
 
-    private static File saverFile = new File(String.valueOf(Launcher.getPath()), "user.infos");
+    private static File saverFile = new File(String.valueOf(Launcher.getGameDir()), "user.infos");
     private static Saver saver = new Saver(saverFile);
     private int mouseX, mouseY;
 

@@ -2,12 +2,13 @@ package fr.cakihorse.swinglauncher.app;
 
 
 
+import fr.cakihorse.swinglauncher.utils.Random;
 import fr.flowarg.flowlogger.ILogger;
 import fr.flowarg.flowlogger.Logger;
 import fr.flowarg.flowupdater.FlowUpdater;
-import fr.flowarg.flowupdater.download.IProgressCallback;
-import fr.flowarg.flowupdater.download.json.MCP;
+
 import fr.flowarg.flowupdater.versions.VanillaVersion;
+import fr.flowarg.openlauncherlib.NoFramework;
 import fr.theshark34.openlauncherlib.external.ExternalLaunchProfile;
 import fr.theshark34.openlauncherlib.external.ExternalLauncher;
 import fr.theshark34.openlauncherlib.minecraft.*;
@@ -23,14 +24,10 @@ import static fr.cakihorse.swinglauncher.app.Main.getSaver;
 
 public class Launcher extends Component {
     private static GameInfos gameInfos = new GameInfos("launcherswing", new GameVersion("1.8.8", GameType.V1_8_HIGHER), new GameTweak[]{});
-    private static Path path = gameInfos.getGameDir();
-    public static File crashFile = new File(String.valueOf(path), "crashes");
-    private static CrashReporter cReporter = new CrashReporter(String.valueOf(crashFile), path);
+    private static Path gameDir = gameInfos.getGameDir();
+    public static File crashFile = new File(String.valueOf(gameDir), "crashes");
+    private static CrashReporter cReporter = new CrashReporter(String.valueOf(crashFile), gameDir);
     public static AuthInfos authInfos;
-    private static fr.cakihorse.swinglauncher.utils.Random Random;
-    private static IProgressCallback callback;
-
-
 
 
 
@@ -51,7 +48,7 @@ public class Launcher extends Component {
                 .withVanillaVersion(vanillaVersion)
                 .withLogger(logger)
                 .build();
-        updater.update(path);
+        updater.update(gameDir);
     }
 
     public static void launch() throws Exception {
@@ -65,6 +62,21 @@ public class Launcher extends Component {
         launcher.launch();
     }
 
+    public static void testlaunch(String gameVersion) {
+        try {
+            NoFramework noFramework = new NoFramework(
+                    gameInfos.getGameDir(),
+                    authInfos,
+                    GameFolder.FLOW_UPDATER
+            );
+            noFramework.getAdditionalVmArgs().add(getSaver().get("ram"));
+            Process p = noFramework.launch(gameVersion, "",NoFramework.ModLoader.VANILLA);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void authCrack() {
         /*
@@ -75,12 +87,13 @@ public class Launcher extends Component {
         authInfos = new AuthInfos(Random.generateRandomString(10), Random.generateRandomAccesToken(10),Random.generateRandomUUID());
     }
 
-    public static Path getPath() {
-        return path;
+    public static Path getGameDir() {
+        return gameDir;
     }
 
     public static AuthInfos getAuthInfos() {
         return authInfos;
     }
+
 
 }
