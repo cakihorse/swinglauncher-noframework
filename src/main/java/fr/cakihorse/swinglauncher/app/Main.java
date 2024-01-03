@@ -49,16 +49,15 @@ public class Main extends JFrame {
         this.setIconImage(new ImageIcon(Resources.getResource("logo.png")).getImage());
         this.setResizable(false);
 
-        //verify if the user is connected
+        //Verify if the user is connected and change the panel if true
         MicrosoftAuthenticator microsoftAuthenticator = new MicrosoftAuthenticator();
         final String refresh_token = getSaver().get("refresh_token");
         MicrosoftAuthResult result = null;
 
-        if (refresh_token != null && !refresh_token.isEmpty()) {
+        if (refresh_token != null) {
             try {
                 result = microsoftAuthenticator.loginWithRefreshToken(refresh_token);
             } catch (MicrosoftAuthenticationException ex) {
-
                 throw new RuntimeException(ex);
             }
             Launcher.authInfos = new AuthInfos(result.getProfile().getName(), result.getAccessToken(), result.getProfile().getId());

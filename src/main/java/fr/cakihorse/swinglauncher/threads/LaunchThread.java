@@ -11,7 +11,7 @@ public class LaunchThread extends Thread {
             throw new RuntimeException(e);
         }
         try {
-            Launcher.testlaunch("1.8.8");
+            Launcher.launch();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
